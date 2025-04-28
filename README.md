@@ -51,6 +51,8 @@ npm start
 La aplicación estará disponible en:  
 http://localhost:3000
 
+o si bien desea, está desplegado en: https://prueba-tecnica-sqcn.onrender.com/api
+
 ### 5. Ejecutar sin Docker
 
 1. Instalar dependencias:
