@@ -3,18 +3,18 @@ import { container } from "tsyringe";
 import { BookService } from "../services/bookService";
 
 export class BookController {
-
   static async createBook(req: Request, res: Response) {
     try {
       const bookService = container.resolve(BookService);
       const response = await bookService.createBook(req.body);
       res.status(201).json({
         status: 201,
-        response: "Book created successfully",
-        extra: response,
+        message: "Book created successfully",
+        result: response,
       });
-    } catch (error: any) {
-      throw new Error(`${error}`);
+    } catch (error) {
+      console.error("Error creating book:", error);
+      res.status(400).json({ message: "Failed to create book" });
     }
   }
 
@@ -25,11 +25,12 @@ export class BookController {
       const response = await bookService.updateBook(id, req.body);
       res.status(200).json({
         status: 200,
-        response: "Book updated successfully",
-        extra: response,
+        message: "Book updated successfully",
+        result: response,
       });
-    } catch (error: any) {
-      throw new Error(`${error}`);
+    } catch (error) {
+      console.error("Error updating book:", error);
+      res.status(400).json({ message: "Failed to update book" });
     }
   }
 
@@ -38,12 +39,10 @@ export class BookController {
       const bookService = container.resolve(BookService);
       const id = parseInt(req.params.id);
       await bookService.deleteBook(id);
-      res.status(204).json({
-        status: 204,
-        response: `Book with ID ${id} deleted successfully`,
-      });
-    } catch (error: any) {
-      throw new Error(`${error}`);
+      res.status(204).send(); 
+    } catch (error) {
+      console.error("Error deleting book:", error);
+      res.status(400).json({ message: "Failed to delete book" });
     }
   }
 }

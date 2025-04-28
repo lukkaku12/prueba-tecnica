@@ -4,26 +4,42 @@ import UserRepository from '../repository/userRepository';
 
 @injectable()
 export default class UserService {
- constructor(private userRepository:UserRepository) {}
+  constructor(private userRepository: UserRepository) {}
 
- async getAllUsers() {
-    const [rows] = await this.userRepository.findAllUsers();
-    return rows;
- }
+  async getAllUsers() {
+    try {
+      const users = await this.userRepository.findAllUsers();
+      return users;
+    } catch (error) {
+      console.error("Error getting all users:", error);
+      throw new Error("Failed to get users");
+    }
+  }
 
+  async createUser(user: Partial<User>) {
+    try {
+      return await this.userRepository.create(user);
+    } catch (error) {
+      console.error("Error creating user:", error);
+      throw new Error("Failed to create user");
+    }
+  }
 
- async createUser(user: Partial<User>) {
-    const result = await this.userRepository.create(user);
-    return result;
- }
+  async deleteUser(id: number) {
+    try {
+      await this.userRepository.delete(id);
+    } catch (error) {
+      console.error("Error deleting user:", error);
+      throw new Error("Failed to delete user");
+    }
+  }
 
- async deleteUser(id:number) {
-    const result = await this.userRepository.delete(id);
-    return result;
- }
-
-  async updateUser(id:number, user:Partial<User>) {
-     return await this.userRepository.update(id,user)
-   }
-
+  async updateUser(id: number, user: Partial<User>) {
+    try {
+      return await this.userRepository.update(id, user);
+    } catch (error) {
+      console.error("Error updating user:", error);
+      throw new Error("Failed to update user");
+    }
+  }
 }

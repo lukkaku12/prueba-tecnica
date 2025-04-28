@@ -27,12 +27,12 @@ export default class BorrowingService {
   private calculateDeadline() {
     const now = new Date();
     const deadline = new Date(now);
-    deadline.setDate(now.getDate() + 15); // 15 días de préstamo
+    deadline.setDate(now.getDate() + 15); 
     return deadline;
   }
 
   async returnBook(userId: number, copyId: number) {
-    // Buscar el préstamo relacionado con esta copia
+    
     const borrowing = await this.borrowingsRepository.findBorrowingByCopyId(copyId);
 
     if (!borrowing) {
@@ -43,10 +43,10 @@ export default class BorrowingService {
       throw new Error('This user did not borrow the book');
     }
 
-    // Marcar la copia como disponible
+    
     await this.borrowingsRepository.markCopyAsAvailable(copyId);
 
-    // Marcar el préstamo como devuelto
+    
     await this.borrowingsRepository.markBorrowingAsReturned(borrowing.id);
 
     return borrowing;

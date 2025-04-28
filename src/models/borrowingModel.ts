@@ -42,6 +42,12 @@ export class Borrowings extends Model {
     })
     borrowing_deadline!: Date;
 
+    @Column({
+        type: DataType.DATE,
+        allowNull: true, 
+    })
+    returned_at?: Date;
+
     @BelongsTo(() => User)
     user!: User;
 

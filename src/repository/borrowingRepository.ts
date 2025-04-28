@@ -9,7 +9,7 @@ export default class BorrowingRepository {
     const copy = await BookCopy.findOne({
       where: {
         book_id: bookId,
-        isAvailable: true,
+        availability: 'available',
       }
     });
     return copy;
@@ -30,7 +30,7 @@ export default class BorrowingRepository {
     if (!copy) {
       throw new Error('Copy not found');
     }
-    await copy.update({ isAvailable: false });
+    await copy.update({ availability: 'borrowed' });
     return copy;
   }
 
@@ -46,7 +46,7 @@ export default class BorrowingRepository {
     if (!copy) {
       throw new Error('Copy not found');
     }
-    await copy.update({ isAvailable: true });
+    await copy.update({ availability: 'available' });
     return copy;
   }
 

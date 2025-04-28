@@ -15,6 +15,7 @@ http://localhost:3000/
 - [Autores](#2-autores-author)
 - [Libros](#3-libros-book)
 - [Préstamos](#4-préstamos-borrowings)
+- [Copias de libros](#5-copias-de-libros-book-copy)
 
 ## Endpoints
 
@@ -44,7 +45,7 @@ http://localhost:3000/
 - **Cuerpo de la solicitud**:
   ```json
   {
-    "name": "John Doe",
+    "user_name": "John Doe",
     "email": "johndoe@example.com",
     "password": "password123"
   }
@@ -124,10 +125,14 @@ http://localhost:3000/
     - **Cuerpo**:
     ```json
     {
-    "id": 1,
-    "author_name": "J.K.",
-    "last_name": "Rowling",
-    "birth_date": "1965-07-31"
+    "status": 201,
+    "message": "Author created successfully",
+    "author": {
+        "id": 1,
+        "author_name": "J.K.",
+        "last_name": "Rowling",
+        "birth_date": "1965-07-31T00:00:00.000Z"
+        }
     }
     ```
 
@@ -236,9 +241,10 @@ http://localhost:3000/
 	- **Cuerpo de la solicitud**:
     ```json
     {
-    "title": "Harry Potter and the Philosopher's Stone",
-    "authorId": 1,
-    "publication_date": "1997-06-26"
+    "name": "Harry Potter and the Philosopher's Stone",
+    "author_id": 1,
+    "date_created": "1997-06-26",
+    "isAvailable":true
     }
     ```
 
@@ -248,10 +254,15 @@ http://localhost:3000/
 	- **Cuerpo**:
     ```json
     {
-    "id": 1,
-    "title": "Harry Potter and the Philosopher's Stone",
-    "authorId": 1,
-    "publication_date": "1997-06-26"
+    "status": 201,
+    "message": "Book created successfully",
+    "result": {
+        "id": 1,
+        "name": "Harry Potter and the Philosopher's Stone",
+        "author_id": 1,
+        "date_created": "1997-06-26T00:00:00.000Z",
+        "isAvailable": true
+        }
     }
     ```
 
@@ -264,9 +275,10 @@ http://localhost:3000/
 	- **Cuerpo de la solicitud**:
     ```json
     {
-    "title": "Harry Potter and the Chamber of Secrets",
-    "authorId": 1,
-    "publication_date": "1998-07-02"
+    "name": "Harry Potter and the Chamber of Secrets",
+    "author_id": 1,
+    "date_created": "1997-06-25",
+    "isAvailable":false
     }
     ```
 
@@ -277,8 +289,8 @@ http://localhost:3000/
     {
     "id": 1,
     "title": "Harry Potter and the Chamber of Secrets",
-    "authorId": 1,
-    "publication_date": "1998-07-02"
+    "author_id": 1,
+    "date_created": "1998-07-02"
     }
     ```
 
@@ -301,13 +313,13 @@ http://localhost:3000/
 
 #### Solicitar un libro prestado
 
-- **Método**: `POST`
+- **Método**: `POST /borrow`
 	- **Descripción**: Realiza un préstamo de un libro.
 	- **Cuerpo de la solicitud**:
     ```json
     {
-    "userId": 1,
-    "bookId": 1
+    "user_id": 1,
+    "book_id": 1
     }
     ```
 
@@ -316,24 +328,28 @@ http://localhost:3000/
 	- **Cuerpo**:
     ```json
     {
-    "borrowingId": 1,
-    "userId": 1,
-    "bookId": 1,
-    "borrowedAt": "2025-04-25T00:00:00Z",
-    "dueDate": "2025-05-25T00:00:00Z"
+    "status": 201,
+    "message": "Book borrowed successfully",
+    "borrowing": {
+        "id": 2,
+        "user_id": 1,
+        "copy_id": 1,
+        "borrowing_date": "2025-04-28T22:31:54.836Z",
+        "borrowing_deadline": "2025-05-13T22:31:54.836Z"
+        }
     }
     ```
 
 
 #### Devolver un libro
 
-- **Método**: `POST`
+- **Método**: `POST /return`
     - **Descripción**: Marca un libro como devuelto.
 	- **Cuerpo de la solicitud**:
     ```json
     {
-    "userId": 1,
-    "copyId": 1
+    "user_id": 1,
+    "copy_id": 1
     }
     ```
 
@@ -347,4 +363,144 @@ http://localhost:3000/
     "bookId": 1,
     "returnedAt": "2025-04-30T00:00:00Z"
     }
+    ```
+
+### 5. **Copias de libros (`/book-copy`)**
+
+#### Crear una copia de un libro
+
+**Método**: `POST`  
+**Endpoint**: `/`
+
+- **Descripción**: Crea una nueva copia para un libro existente.
+- **Cuerpo de la solicitud**:
+  ```json
+  {
+    "bookId": 1
+  }
+  ```
+- **Respuesta**:
+  - **Código de estado**: `201 Created`
+  - **Cuerpo**:
+    ```json
+    {
+      "id": 10,
+      "bookId": 1,
+      "status": "available",
+      "createdAt": "2025-04-28T00:00:00Z",
+      "updatedAt": "2025-04-28T00:00:00Z"
+    }
+    ```
+
+---
+
+#### Eliminar una copia de un libro
+
+**Método**: `DELETE`  
+**Endpoint**: `/:id`
+
+- **Descripción**: Elimina una copia de un libro a partir de su ID.
+- **Parámetros**: 
+  - `id`: ID de la copia a eliminar (número entero).
+- **Respuesta**:
+  - **Código de estado**: `204 No Content`
+  - **Cuerpo**: Sin contenido.
+
+---
+
+#### Obtener una copia de un libro por ID
+
+**Método**: `GET`  
+**Endpoint**: `/:id`
+
+- **Descripción**: Obtiene los detalles de una copia específica de un libro.
+- **Parámetros**:
+  - `id`: ID de la copia (número entero).
+- **Respuesta**:
+  - **Código de estado**: `200 OK`
+  - **Cuerpo**:
+    ```json
+    {
+      "id": 10,
+      "bookId": 1,
+      "status": "available",
+      "createdAt": "2025-04-28T00:00:00Z",
+      "updatedAt": "2025-04-28T00:00:00Z"
+    }
+    ```
+
+---
+
+#### Marcar una copia como prestada
+
+**Método**: `POST`  
+**Endpoint**: `/:id/borrow`
+
+- **Descripción**: Marca una copia de libro como prestada.
+- **Parámetros**:
+  - `id`: ID de la copia (número entero).
+- **Respuesta**:
+  - **Código de estado**: `200 OK`
+  - **Cuerpo**:
+    ```json
+    {
+      "id": 10,
+      "bookId": 1,
+      "status": "borrowed",
+      "updatedAt": "2025-04-28T00:00:00Z"
+    }
+    ```
+
+---
+
+#### Marcar una copia como disponible
+
+**Método**: `POST`  
+**Endpoint**: `/:id/return`
+
+- **Descripción**: Marca una copia de libro como disponible después de ser devuelta.
+- **Parámetros**:
+  - `id`: ID de la copia (número entero).
+- **Respuesta**:
+  - **Código de estado**: `200 OK`
+  - **Cuerpo**:
+    ```json
+    {
+      "id": 10,
+      "bookId": 1,
+      "status": "available",
+      "updatedAt": "2025-04-28T00:00:00Z"
+    }
+    ```
+
+---
+
+#### Listar copias disponibles de un libro
+
+**Método**: `GET`  
+**Endpoint**: `/available/:bookId`
+
+- **Descripción**: Obtiene todas las copias disponibles de un libro específico.
+- **Parámetros**:
+  - `bookId`: ID del libro (número entero).
+- **Respuesta**:
+  - **Código de estado**: `200 OK`
+  - **Cuerpo**:
+    ```json
+    [
+      {
+        "id": 10,
+        "bookId": 1,
+        "status": "available",
+        "createdAt": "2025-04-28T00:00:00Z",
+        "updatedAt": "2025-04-28T00:00:00Z"
+      },
+      {
+        "id": 11,
+        "bookId": 1,
+        "status": "available",
+        "createdAt": "2025-04-28T00:00:00Z",
+        "updatedAt": "2025-04-28T00:00:00Z"
+      }
+    ]
     ```
