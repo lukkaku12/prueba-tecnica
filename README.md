@@ -9,6 +9,7 @@ Este es un proyecto de prueba técnica que utiliza Node.js con Sequelize para ma
 - Docker y Docker Compose
 - Node.js (versión LTS recomendada)
 - MySQL (si no se usa Docker)
+- Postman o algun cliente para peticiones HTTP
 
 ## Instrucciones para correr el proyecto localmente
 
@@ -51,7 +52,8 @@ npm start
 La aplicación estará disponible en:  
 http://localhost:3000
 
-o si bien desea, está desplegado en: https://prueba-tecnica-sqcn.onrender.com/api
+o si bien desea, está desplegado en:
+https://prueba-tecnica-sqcn.onrender.com/api
 
 ### 5. Ejecutar sin Docker
 
@@ -79,6 +81,8 @@ llenarlo con datos de su base de datos MySQL *existente* al arrancar el proyecto
 npm start
 ```
 
+#### o si bien desea, se puede usar el servidor que está desplegado [aqui](https://prueba-tecnica-sqcn.onrender.com)
+
 
 ## Decisiones de Modelado
 
@@ -86,10 +90,10 @@ npm start
 | Modelo      | Campos                          |
 |-------------|---------------------------------|
 | Author      | id, author_name, last_name, birth_date |
-| Book        | id, title, author_id, genre, publish_date |
+| Book        | id, name, author_id, isAvailable, date_created |
 | User        | id, user_name, email, password  |
-| Borrowings  | id, user_id, book_copy_id, borrow_date, return_date |
-| BookCopy    | id, book_id, status             |
+| Borrowings  | id, user_id, book_copy_id, borrow_date, borrow_deadline, returned_at |
+| BookCopy    | id, book_id, availability             |
 
 ### Relaciones
 - **Author → Book** (1:N)  
@@ -102,6 +106,9 @@ npm start
   Los préstamos se registran a través de la tabla Borrowings.
 
 <img width="919" alt="image" src="https://github.com/user-attachments/assets/4d9ed6fb-57d5-430b-ac99-efb07daaaad6" />
+
+
+Decidí separar los libros (Book) de sus copias físicas (BookCopy) para poder manejar múltiples ejemplares del mismo título. Relacioné autores, libros, copias y usuarios de forma clara usando claves foráneas. También agregué un campo availability en las copias para saber si están disponibles o prestadas, y controlé las devoluciones con un campo returned_at en los préstamos (Borrowings). Busqué que el modelo sea sencillo, realista y fácil de expandir.
 
 ## Configuración de la Base de Datos
 La conexión se establece mediante Sequelize usando esta configuración:
