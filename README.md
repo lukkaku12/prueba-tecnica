@@ -99,8 +99,11 @@ npm start
 - **User ↔ Borrowings ↔ BookCopy** (N:M)  
   Los préstamos se registran a través de la tabla Borrowings.
 
+<img width="919" alt="image" src="https://github.com/user-attachments/assets/4d9ed6fb-57d5-430b-ac99-efb07daaaad6" />
+
 ## Configuración de la Base de Datos
 La conexión se establece mediante Sequelize usando esta configuración:
+
 
 ```typescript
 const sequelize = new Sequelize({
