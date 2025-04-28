@@ -1,16 +1,18 @@
 import { Router } from "express";
 import { userController } from "../controllers/userController";
 
+const userRouter = Router();
 
-const userRouter = Router()
-
-
-
+// Obtener todos los usuarios
 userRouter.get('/', userController.getAll);
-userRouter.post('/', userController.createUser);
-userRouter.put('/:id', userController.editUser);
-userRouter.delete('/:id', userController.delete)
 
-//funciona
+// Crear un nuevo usuario
+userRouter.post('/', userController.createUser);
+
+// Editar un usuario existente (por ID)
+userRouter.put('/:id', userController.editUser);
+
+// Eliminar un usuario por ID
+userRouter.delete('/:id', userController.delete);
 
 export default userRouter;

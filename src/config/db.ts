@@ -1,6 +1,6 @@
 import { Sequelize } from "sequelize-typescript";
 import dotenv from "dotenv";
-import  {}  from '../models';
+import  { Author, Book, Borrowings, User, BookCopy }  from '../models';
 
 dotenv.config();
 
@@ -11,7 +11,7 @@ const sequelize: Sequelize = new Sequelize({
     password: process.env.DB_PASSWORD,
     port: Number(process.env.DB_PORT),
     dialect: 'mysql',
-    models: []
+    models: [Author, Book, BookCopy, Borrowings, User]
 });
 
 export default sequelize;

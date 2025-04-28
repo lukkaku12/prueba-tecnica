@@ -17,8 +17,8 @@ const runServer = async () => {
       app.listen(3000, () => {
         console.log('listening on port http://localhost:3000')
       })
-    } catch (error:any) {
-        throw new Error(error)
+    } catch (error) {
+        console.error(error)
     }
 }
 

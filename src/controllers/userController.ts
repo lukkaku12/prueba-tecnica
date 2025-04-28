@@ -11,8 +11,8 @@ export class userController {
         status: 200,
         result: response
       });
-    } catch (error: any) {
-      throw new Error(error);
+    } catch (error) {
+      throw new Error(`${error}`);
     }
   }
 
@@ -26,8 +26,8 @@ export class userController {
         response: "user created successfully",
         extra: reponse,
       });
-    } catch (error: any) {
-      throw new Error(error);
+    } catch (error) {
+      throw new Error(`${error}`);
     }
   }
 
@@ -41,8 +41,8 @@ export class userController {
         response: "product transformed successfully",
         extra: reponse,
       });
-    } catch (error: any) {
-      throw new Error(error);
+    } catch (error) {
+      throw new Error(`${error}`);
     }
   }
 
@@ -54,8 +54,8 @@ export class userController {
         status: 204,
         response: `${response} eliminated successfully`,
       });
-    } catch (error: any) {
-      throw new Error(error);
+    } catch (error) {
+      throw new Error(`${error}`);
     }
   }
 

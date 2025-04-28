@@ -1,4 +1,5 @@
-import { AutoIncrement, BelongsTo, Column, DataType, ForeignKey, HasMany, Model, PrimaryKey, Table } from "sequelize-typescript";
+import { AutoIncrement, Column, DataType, HasMany, Model, PrimaryKey, Table } from "sequelize-typescript";
+import { Borrowings } from "./borrowingModel";
 
 
 @Table({
@@ -18,6 +19,12 @@ export class User extends Model {
         type: DataType.STRING,
         allowNull:false
     })
+    user_name!:string;
+
+    @Column({
+        type: DataType.STRING,
+        allowNull:false
+    })
     email!:string;
 
     @Column({
@@ -26,6 +33,7 @@ export class User extends Model {
     })
     password!:string;
 
-
+    @HasMany(() => Borrowings)
+    borrowings?: Borrowings[];
 
 }
